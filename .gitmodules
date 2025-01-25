@@ -1,0 +1,3 @@
+[submodule "dotqlcplus"]
+	path = dotqlcplus
+	url = https://github.com/TechnoTUT/dotqlcplus.git
