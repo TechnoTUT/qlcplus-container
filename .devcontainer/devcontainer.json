@@ -1,0 +1,22 @@
+{
+	"name": "qlcplus-container",
+	"build": {
+        "dockerfile": "Containerfile"
+    },
+
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+		"extensions": [
+		"ms-ceintl.vscode-language-pack-ja",
+		"github.vscode-github-actions",
+		"github.vscode-pull-request-github",
+        "ms-azuretools.vscode-docker",
+		"eamodio.gitlens"
+		]
+	 }
+	},
+	// If you want to run on Podman, uncomment the next line.
+	// "runArgs": ["--security-opt", "label=disable"],
+	// "remoteUser": ""
+}

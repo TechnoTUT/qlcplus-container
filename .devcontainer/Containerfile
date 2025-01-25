@@ -1,0 +1,7 @@
+FROM docker.io/fedora:40
+
+RUN dnf update -y \
+ && dnf install 'dnf-command(config-manager)' -y \
+ && dnf config-manager --add-repo https://download.opensuse.org/repositories/home:mcallegari79/Fedora_40/home:mcallegari79.repo \
+ && dnf install -y git qlcplus-qt5 xorg-x11-server-Xvfb \
+ && dnf clean all

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qlc-deployment
+  labels:
+    app: qlcplus
+  namespace: led
+spec:
+  selector:
+    matchLabels:
+      app: qlcplus
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: qlcplus
+    spec:
+      containers:
+      - name: qlcplus
+        image: ghcr.io/technotut/qlcplus-container:main
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 7000
+        - containerPort: 9999
+        resources:
+          limits:
+            cpu: 1
+            memory: 256Mi
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qlc-service
+  labels:
+    app: qlcplus
+  namespace: led
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: qlc.kube.technotut.net
+spec:
+  selector:
+    app: qlcplus
+  type: LoadBalancer
+  loadBalancerIP: 10.33.178.0
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 9999
+    - name: osc
+      protocol: UDP
+      port: 7000
+      targetPort: 7000

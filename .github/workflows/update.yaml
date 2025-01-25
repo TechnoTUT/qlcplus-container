@@ -1,0 +1,34 @@
+name: Update submodules
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  update-submodules:
+    runs-on: ubuntu-latest
+    env:
+      TZ: "Asia/Tokyo"
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+    - name: Update submodules
+      id: update
+      run: git submodule update --remote --recursive
+    - name: Run git status
+      id: status
+      run: echo "::set-output name=status::$(git status -s)"
+    - name: Add and commit changes
+      if: ${{ steps.status.outputs.status }}
+      run: |
+        git add .
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -m "Update submodules at $(date "+DATE: %Y-%m-%d TIME: %H:%M:%S")"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      if: ${{ steps.status.outputs.status && github.event_name == 'push' }}
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
